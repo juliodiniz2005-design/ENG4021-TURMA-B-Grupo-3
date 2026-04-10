@@ -1,0 +1,7 @@
+Ao clicar no produto em que deseja comprar, algumas informações devem aparecer. 
+Informações acerca do produto devem aparecer para o cliente tomar a melhor e mais segura decisão sobre o produto que deseja comprar. Primeiramente, deve aparecer o nome do produto com uma
+imagem do mesmo ao lado, para facilitar a identificação. Em seguida, é importante que apareça não só o preço original, mas também o preço com o desconto aplicado sobre ele, de forma que 
+guie o consumidor a decisão de comprar esse produto. 
+Outro elemento essencial é a descrição desse produto, com a data de validade, com um aviso de que, apesar de próximo do prazo de valdiade, ele ainda está próprio para consumo. 
+Após isso, o cliente já deve ter decidido se deseja ou não levar o produto. Caso deseje, terá um botão de 'Adicionar ao carrinho' disponível na tela, que o levará para as opções de pagamento
+e de entrega. 
