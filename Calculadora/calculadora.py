@@ -2,11 +2,12 @@ import divide
 import multiplica
 import soma
 import subtrai
+import potencia
 
 def main():
     a = float (input("Digite o primeiro número real: "))
     b = float (input("Digite o segundo número real: "))
-    operador = input("Qual operção você deseja realizar (+|-|*|/): ")
+    operador = input("Qual operção você deseja realizar (+|-|*|/|^): ")
 
     if operador == "+":
         resultado = soma.somaf(a,b)
@@ -19,6 +20,9 @@ def main():
 
     elif operador == "/":
         resultado = divide.dividef(a,b)
+
+    elif operador == "^":
+        resultado = potencia.potenciaf(a,b)
     
     else:
         resultado = "Número ou operador inválido!"
