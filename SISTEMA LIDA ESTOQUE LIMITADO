@@ -1,0 +1,4 @@
+Ao adicionar o item ao carrinho ou iniciar o checkout, o sistema "bloqueia" aquela unidade por um tempo determinado. Se o pagamento não for confirmado no prazo, o sistema libera o item automaticamente para o estoque disponível.
+O comando de "baixar estoque" e "criar pedido" deve ser uma única operação. Se o estoque chegar a zero durante o processamento, a transação falha e o segundo usuário recebe um erro instantâneo de "Produto Esgotado".
+Para lidar com picos, ex: (como quando uma sacola de padaria muito disputada é liberada), gerenciar uma fila de "primeiro a chegar, primeiro a ser servido".
+O app deve desabilitar o botão de "Comprar" e mostrar um selo de "Esgotado" ou "No Carrinho de alguém" assim que o estoque chegar a zero.
