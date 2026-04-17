@@ -1,0 +1,16 @@
+Esse mecanismo é muito importante para facilitar e agilizar o processo de venda dos produtos, evitando desperdícios. O sistema precisará ser automatizado para poder monitorar todos 
+os produtos cadastrados, identificando com base na data de vencimento, o quanto falta. A partir daí, ele pode 
+avisar tanto o mercado, quanto o consumidor.  
+1) Mercados
+A notificação servirá de alerta para avisar que determinado produto está fora da validade, sugerir algum desonto para aplicar nesse produto, avisar que já chegou na validade e 
+ser atualizado no catálogo deles. 
+2) Consumidores
+Essa notificação avisará que tem uma grande promoção sobre algum produto perto de sua localização, algum intem favoritado pelo cliente entrou ou teve sua promocção aumentada, novas 
+ofertas estão disponíveis próxima dele, algum produto está próximo de ser retirado venda pois atingiu sua data de validade. 
+
+As notificações chegarão de diferentes formas. Caso o cliente possua o app para telefone, chegará como uma notificação push comum, assim como a de outros aplicativos. Simultaneamente 
+chegará um email detalhando o produto. Elas devem chegar em momentos cirúrgicos, como assim que um produto já entra na faixa promocional, quando o desconto sobre o produto aumentar, 
+quando esse produto está perto do final ou perto do vencimento. 
+
+Esse tipo de promção aumenta a visibildade de produtos em promoção - benéfico para mercado e consumidor -, reduz desperdício de alimentos, oferece ao consumidor mais oportunidade de 
+economia financeira, melhora a comunicação mercado-consumidor. 
