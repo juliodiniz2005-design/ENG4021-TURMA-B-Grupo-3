@@ -1,0 +1,50 @@
+1 - Erros de Estoque:
+
+Se o aplicativo vende uma sacola de padaria para o usuário, mas o produto é vendido simultaneamente no supermercado para um cliente presencial.
+Impacto: Frustração extrema do consumidor, que se desloca até o mercado e descobre que perdeu a viagem, gerando avaliações negativas e perda de confiança no app.
+
+Algumas soluções propostas são:
+- Reserva de Estoque Virtual Isolada para separar fisicamente os produtos do app.
+- Mecanismo de Locking Automatizado: No backend, implementar um bloqueio temporário de 10 minutos assim que o usuário inicia o checkout.
+
+2 - Falhas no Processamento de Pagamentos e Estornos:
+
+O usuário realiza o pagamento via PIX ou cartão de crédito dentro do app, mas a API de pagamento cai, o dinheiro é cobrado do cliente,
+e o pedido não é computado para o lojista. Ou, inversamente, o pedido precisa ser cancelado e o estorno demora dias.
+Impacto: Atrito financeiro direto com o cliente e passivos jurídicos para a sua plataforma.
+
+Algumas soluções propostas são:
+- Carteira Virtual Integrada: Em caso de cancelamentos por culpa do mercado, oferecer o reembolso instantâneo em forma de "Créditos no App" para uso imediato, agilizando o processo e mantendo o capital na plataforma.
+- Fila de Mensageria com Reatentativa (Webhooks): Caso a resposta do pagamento falhe, o sistema armazena a transação em uma fila de processamento para verificar o status novamente em segundos, antes de invalidar o carrinho.
+
+3 - Comercialização Indevida de Produtos Vencidos:
+
+Devido à falta de atenção de um funcionário do mercado, um produto com a data de validade já expirada (vencido há horas ou dias) é colocado dentro de uma sacola.
+Impacto: Risco grave à saúde pública, fiscalização e multas da Vigilância Sanitária, e destruição completa da reputação da marca.
+
+Algumas soluções propostas são:
+- Aviso de Validade Obrigatório: O sistema B2B do lojista não deve permitir o cadastro de produtos sem o preenchimento do campo "Data/Hora de Vencimento". O algoritmo bloqueará automaticamente ofertas cuja data inserida 
+seja menor ou igual ao horário atual de Brasília.
+- Política de Reembolso "Foto-Garantia": Uma funcionalidade dentro do perfil do usuário onde ele pode reportar um item impróprio enviando uma foto da etiqueta de validade expirada. O reembolso é automático e o mercado 
+sofre uma penalidade financeira no sistema.
+
+4 - Atrito Operacional na Retirada:
+
+Funcionários que não conhecem o aplicativo, gerando filas extras e constrangimento.
+Impacto: Alta taxa de abandono do app por parte do consumidor e reclamações gerenciais do lojista que vê sua operação travada.
+
+Algumas soluções propostas são:
+- Totem ou Balcão Exclusivo: A retirada nunca deve competir com a fila tradicional do caixa. O design do serviço deve prever a retirada no balcão de atendimento ao cliente, setor de pacotes ou na gerência.
+- Validação por QR Code: O cliente chega ao local, aponta a câmera do celular para um display físico do SaveMarket no balcão e valida o código. O funcionário apenas confere o status de "Confirmado" na tela 
+verde do usuário e entrega a sacola.
+
+5 - Clientes Ausentes no Horário de Retirada:
+
+O usuário compra a sacola de consumo imediato (ex: salgados e pães que vencem naquele dia), mas esquece ou não consegue ir buscar até o horário de fechamento do estabelecimento.
+Impacto: O produto precisa ser descartado pelo mercado de qualquer forma, gerando atrito sobre quem arca com o prejuízo financeiro.
+
+Algumas soluções propostas são: 
+- Não-Reembolso por Desistência: Deixar claro nos termos do app que, por se tratarem de itens perecíveis, o não-comparecimento na janela agendada resulta em perda do produto sem direito a estorno.
+- Alertas por Localização: Se o app detectar que faltam 30 minutos para o encerramento do horário de retirada e o usuário não está se movendo em direção ao local, disparar notificações de alerta com urgência.
+
+
