@@ -1,0 +1,13 @@
+Como o preço e o fator financeiro são os maiores influenciadores de compra do nosso público, transformar essa economia em uma métrica visual é um excelente gatilho de retenção.
+
+O cálculo baseia-se na diferença entre o Preço Original de Mercado (valor cheio) e o Preço SaveMarket (valor com o desconto de 50% a 70%).
+Para cada sacola ou item comprado e efetivamente retirado, a economia daquela transação é armazenada e exibida. O sistema realiza o somatório de todas as transações concluídas com sucesso pelo usuário ao longo do tempo
+Se o pedido for cancelado ou ocorrer algum erro, o cálculo daquela transação é desconsiderado para manter a integridade dos dados.
+
+Modelo: Assim que o lojista confirma a entrega da sacola, o backend processa o encerramento do pedido, calcula a economia daquela compra e atualiza o campo de "Economia Acumulada".
+O histórico fica salvo de forma analítica (por transação e por data) para permitir a geração de gráficos de evolução temporal.
+
+Exibição: Informação ganha destaque no topo da tela de perfil e na tela de confirmação de compra, utilizando elementos que chamem atenção, como: 
+- Um contador em destaque com fonte grande e cor verde (associada a dinheiro e sustentabilidade). Texto: "Você já economizou R$ X salvando alimentos!"
+- Aba de "Meu Impacto" exibe um gráfico de linhas simples que mostra a economia do mês ou ano.
+- Feedback após compra como: "Parabéns! Nessa retirada você economizou R$ X e evitou o desperdício de Xkg de comida."
