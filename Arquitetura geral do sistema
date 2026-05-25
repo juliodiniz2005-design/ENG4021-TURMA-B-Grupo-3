@@ -1,0 +1,44 @@
+A arquitetura do sistema será dividida em três partes principais: frontend, backend e banco de dados. 
+1) Frontend
+O frontend será a parte visual do sistema, ou seja, a interface usada pelo consumidor, pelo mercado e pelo administrador. Nele o usuário poderá ver diferentes atributos do aplicativo, como:
+- visualizar produtos próximos da validade
+- fazer login e cadastro
+- adicionar produtos ao carrinho
+- realizar pagamentos
+- acompanhar pedidos
+Para a interface dele, poderá ser utilizado tanto HTML como JavaScript. Ele deve ser feito de forma intuitiva para poder ajudar o usuário utilizar de forma simples.
+2) Backend
+O backend é a parte responsável pela lógica do sistema. Ele não aparece diretamente para o usuário, mas é o que faz o aplicativo funcionar. Ele vai receber as informações enviadas pelo frontend, 
+e processá-las e interagir com o banco de dados. Algumas das suas principais funções são:
+- Validar login e cadastro dos usuários
+- Verificar se o produto ainda está dentro da validade
+- Calcular automaticamente os descontos
+- Atualizar o estoque após compras ou reservas
+O backend que seria responsável, por exemplo, pelo cálculo de aplicação de desconto em cima dos produtos. Ele vai verificar quanto tempo falta para a data de validade e, 
+com base nisso calculará o desconto. 
+3) Banco de dados
+O banco de dados é onde todas as informações do sistema ficam armazenadas. Ele armazena dados como:
+- usuários cadastrados
+- mercados
+- produtos
+No âmbito de usuários, guarda: 
+- nome
+- e-mail
+- senha criptografada
+- tipo de usuário
+
+4) Comunicação entre eles
+Usuário realiza ação no frontend --> O frontend envia essa solicitação para o backend --> O backend analisa a solicitação --> O backend consulta ou atualiza o banco de dados -->
+O banco de dados retorna as informações --> O backend envia a resposta para o frontend --> O frontend mostra o resultado para o usuário. 
+
+
+
+
+
+
+
+
+
+
+
+
