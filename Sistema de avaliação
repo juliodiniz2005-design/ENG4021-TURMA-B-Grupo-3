@@ -1,0 +1,18 @@
+O sistema de avaliações permitirá que os consumidores deem feedback sobre os mercados e produtos comprados pelo aplicativo. Dessa forma, nós e os mercados poderemos 
+analisar pontos em que podemos melhorar, assim como pontos em que acertamos. 
+1) Avaliação do produto 
+- nota de 1 a 5 
+- se o produto estava em bom estado
+- se a validade estava correta
+- se o desconto foi vantajoso
+
+2) Avaliação do mercado
+- atendimento
+- organização da retirada
+- clareza das informações
+- disponibilidade do produto
+
+3) Sistema de comnetários
+Em baixo de cada produto e de cada supermercado, o usuaário poderá deixar uma avaliação escrita, descrevendo exatamente como foi sua experiência com ambos, para dessa
+forma outros usuários tomarem a melhor decisão possível sobre o que comprar e onde comprar. 
+Deverá também haver um filtro nos comentários, apenas impedindo comentários imporóprios. 
