@@ -3,59 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-
+    <title>SaveMarket - Login</title>
     {% load static %}
-
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-
+    
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-background text-foreground min-h-screen flex items-center justify-center p-4">
 
-    <div class="container">
-
-        <div class="card">
-
-            <h1>Login</h1>
-
-            {% if messages %}
-                {% for message in messages %}
-
-                    <p class="{% if message.tags %}{{ message.tags }}{% endif %}">
-                        {{ message }}
-                    </p>
-
-                {% endfor %}
-            {% endif %}
-
-            <form method="POST">
-
-                {% csrf_token %}
-
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="E-mail"
+    
+    <div class="w-full max-w-sm bg-card text-card-foreground border border-border rounded-2xl p-6 shadow-sm">
+        
+        <h1 class="text-3xl font-bold text-center mb-8 brand-font text-primary">SaveMarket</h1>
+        
+        <form method="POST" class="flex flex-col space-y-4">
+            {% csrf_token %}
+            
+            <div>
+                <input 
+                    type="email" 
+                    name="email" 
+                    placeholder="E-mail" 
                     required
+                    class="w-full px-4 py-3 bg-transparent border border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-ring transition-colors placeholder:text-muted-foreground"
                 >
+            </div>
 
-                <input
-                    type="password"
-                    name="senha"
-                    placeholder="Senha"
+            <div>
+                <input 
+                    type="password" 
+                    name="senha" 
+                    placeholder="Senha" 
                     required
+                    class="w-full px-4 py-3 bg-transparent border border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-ring transition-colors placeholder:text-muted-foreground"
                 >
+            </div>
 
-                <button type="submit">
-                    Entrar
-                </button>
+            <button type="submit" class="w-full bg-primary text-primary-foreground font-semibold py-3 rounded-xl hover:opacity-90 transition-opacity mt-2">
+                Entrar
+            </button>
+        </form>
 
-            </form>
-
-            <a href="/registro/" class="link">
-                Criar conta
-            </a>
-
+        <div class="mt-6 flex flex-col space-y-2 text-center text-sm">
+            <a href="#" class="text-muted-foreground hover:text-primary transition-colors">Esqueci minha senha</a>
+            <a href="/registro/" class="text-primary font-medium hover:underline">Não tem uma conta? Cadastre-se</a>
         </div>
 
     </div>
