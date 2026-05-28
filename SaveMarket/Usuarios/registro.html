@@ -1,73 +1,67 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>Registro</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaveMarket - Criar Conta</title>
     {% load static %}
-
-    <link rel="stylesheet"
-          href="{% static 'css/style.css' %}">
-
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-background text-foreground min-h-screen flex items-center justify-center p-4">
 
-    <div class="container">
+   
+    <div class="w-full max-w-sm bg-card text-card-foreground border border-border rounded-2xl p-6 shadow-sm">
+        
+        <h1 class="text-2xl font-bold text-center mb-6 brand-font">Criar Conta</h1>
+        
+        <form method="POST" class="flex flex-col space-y-4">
+            {% csrf_token %}
+            
+            <input 
+                type="text" 
+                name="nome" 
+                placeholder="Nome Completo" 
+                required
+                class="w-full px-4 py-3 bg-transparent border border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-ring transition-colors placeholder:text-muted-foreground"
+            >
 
-        <div class="card">
+            <input 
+                type="email" 
+                name="email" 
+                placeholder="E-mail" 
+                required
+                class="w-full px-4 py-3 bg-transparent border border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-ring transition-colors placeholder:text-muted-foreground"
+            >
 
-            <h1>Registrar Usuário</h1>
+            <input 
+                type="tel" 
+                name="telefone" 
+                placeholder="Telefone / WhatsApp" 
+                required
+                class="w-full px-4 py-3 bg-transparent border border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-ring transition-colors placeholder:text-muted-foreground"
+            >
 
-            {% if messages %}
-                {% for message in messages %}
+            <input 
+                type="password" 
+                name="senha" 
+                placeholder="Senha" 
+                required
+                class="w-full px-4 py-3 bg-transparent border border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-ring transition-colors placeholder:text-muted-foreground"
+            >
 
-                    <p class="{% if message.tags %}{{ message.tags }}{% endif %}">
-                        {{ message }}
-                    </p>
+            <label class="flex items-center space-x-2 text-sm text-muted-foreground mt-2 cursor-pointer">
+                <input type="checkbox" required class="rounded border-input text-primary focus:ring-ring">
+                <span>Concordo com os Termos de Uso</span>
+            </label>
 
-                {% endfor %}
-            {% endif %}
+            <button type="submit" class="w-full bg-primary text-primary-foreground font-semibold py-3 rounded-xl hover:opacity-90 transition-opacity mt-2">
+                Cadastrar
+            </button>
+        </form>
 
-            <form method="POST">
-
-                {% csrf_token %}
-
-                <input
-                    type="text"
-                    name="nome"
-                    placeholder="Nome"
-                    required
-                >
-
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="E-mail"
-                    required
-                >
-
-                <input
-                    type="password"
-                    name="senha"
-                    placeholder="Senha"
-                    required
-                >
-
-                <button type="submit">
-                    Registrar
-                </button>
-
-            </form>
-
-            <a href="/" class="link">
-                Voltar para Login
-            </a>
-
+        <div class="mt-6 text-center text-sm">
+            <a href="/login/" class="text-primary font-medium hover:underline">Já possui conta? Faça Login</a>
         </div>
 
     </div>
