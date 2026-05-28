@@ -1,35 +1,114 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Administrador</title>
-
-  <link rel="stylesheet" href="../css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaveMarket - Ofertas</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
 
-  <div class="container">
+<body class="bg-background text-foreground min-h-screen">
 
-    <div class="card">
+    <div class="max-w-md mx-auto relative shadow-sm min-h-screen bg-background border-x border-border pb-20">
+        
+        
+        <header class="sticky top-0 bg-background/95 backdrop-blur z-10 px-4 pt-6 pb-4 border-b border-border">
+            <div class="flex justify-between items-center mb-4">
+                <div>
+                    <h1 class="text-2xl font-bold text-primary brand-font">SaveMarket</h1>
+                    <p class="text-sm text-muted-foreground flex items-center gap-1 mt-1">
+                        📍 PUC RIO 
+                    </p>
+                </div>
+              
+                <div class="w-10 h-10 rounded-full bg-secondary border border-border flex items-center justify-center text-secondary-foreground font-bold">
+                    GF
+                </div>
+            </div>
 
-      <h1>Painel Administrativo</h1>
+          
+            <div class="relative">
+                <input 
+                    type="text" 
+                    placeholder="Buscar mercados e padarias..." 
+                    class="w-full pl-4 pr-10 py-2.5 bg-card border border-input rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-ring placeholder:text-muted-foreground"
+                >
+            </div>
+        </header>
 
-      <h2>Lista de Usuários</h2>
+       
+        <div class="flex space-x-3 px-4 py-4 overflow-x-auto no-scrollbar">
+            <button class="px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors bg-primary text-primary-foreground border border-primary">
+                Todas
+            </button>
+            <button class="px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors bg-card text-card-foreground border border-border hover:bg-muted">
+                Padaria
+            </button>
+            <button class="px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors bg-card text-card-foreground border border-border hover:bg-muted">
+                Laticínios
+            </button>
+            <button class="px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors bg-card text-card-foreground border border-border hover:bg-muted">
+                Hortifruti
+            </button>
+        </div>
 
-      <ul id="listaUsuarios"></ul>
+       
+        <main class="px-4 flex flex-col space-y-4 mt-2">
+            
+            
+            <div class="bg-card text-card-foreground border border-border rounded-2xl p-4 flex gap-4">
+                
+                <div class="w-24 h-24 bg-muted rounded-xl shrink-0 border border-border object-cover"></div>
+                
+               
+                <div class="flex-1 flex flex-col">
+                    <span class="bg-destructive text-destructive-foreground text-[10px] uppercase font-bold px-2 py-0.5 rounded-md self-start tracking-wider mb-1">
+                        Vence Hoje
+                    </span>
+                    <h2 class="font-semibold text-base leading-tight">Sacola de Pães e Salgados</h2>
+                    <p class="text-xs text-muted-foreground mt-1 mb-2">Padaria de Fulano - 1.2 km</p>
+                    
+                    <div class="flex justify-between items-end mt-auto">
+                        <div class="flex flex-col">
+                            <span class="text-xs text-muted-foreground line-through">R$ 45,00</span>
+                            <span class="text-lg font-bold text-primary leading-none">R$ 14,90</span>
+                        </div>
+                        <button class="bg-primary text-primary-foreground px-4 py-1.5 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity">
+                            Salvar
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-      <a href="../login.html" class="link">
-        Sair
-      </a>
+           
+            <div class="bg-card text-card-foreground border border-border rounded-2xl p-4 flex gap-4">
+                
+                <div class="w-24 h-24 bg-muted rounded-xl shrink-0 border border-border object-cover"></div>
+                
+               
+                <div class="flex-1 flex flex-col">
+                    <span class="bg-warning text-warning-foreground text-[10px] uppercase font-bold px-2 py-0.5 rounded-md self-start tracking-wider mb-1">
+                        Vence Amanhã
+                    </span>
+                    <h2 class="font-semibold text-base leading-tight">Kit de Laticínios e Iogurtes</h2>
+                    <p class="text-xs text-muted-foreground mt-1 mb-2">Mercado Central • 2.5 km</p>
+                    
+                    <div class="flex justify-between items-end mt-auto">
+                        <div class="flex flex-col">
+                            <span class="text-xs text-muted-foreground line-through">R$ 80,00</span>
+                            <span class="text-lg font-bold text-primary leading-none">R$ 32,00</span>
+                        </div>
+                        <button class="bg-primary text-primary-foreground px-4 py-1.5 rounded-lg text-sm font-semibold hover:opacity-90 transition-opacity">
+                            Salvar
+                        </button>
+                    </div>
+                </div>
+            </div>
 
+        </main>
     </div>
-
-  </div>
-
-  <script src="../js/script.js"></script>
 
 </body>
 </html>
