@@ -1,0 +1,150 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaveMarket</title>
+
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+
+    <!-- Ícones -->
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- TOPO -->
+        <header class="topo">
+
+            <div class="localizacao">
+                <div class="icone-local">
+                    <i class="fa-solid fa-location-dot"></i>
+                </div>
+
+                <div>
+                    <p class="entregar">Entregar para</p>
+                    <h3>Rio de Janeiro - Brasil</h3>
+                </div>
+            </div>
+
+            <div class="icones-topo">
+                <i class="fa-solid fa-gift"></i>
+                <i class="fa-regular fa-bell"></i>
+            </div>
+
+        </header>
+
+        <!-- PESQUISA -->
+        <div class="pesquisa">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input type="text" placeholder="Pesquisar produtos">
+
+        </div>
+
+        <!-- BANNER -->
+        <section class="banner">
+            <p>(Produtos em alta)</p>
+        </section>
+
+        <!-- BOLINHAS -->
+        <div class="bolinhas">
+            <span class="ativa"></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <!-- CATEGORIAS -->
+        <section class="categorias">
+
+            <div class="titulo-categoria">
+                <h2>Comprar por categoria</h2>
+                <a href="#">Ver tudo</a>
+            </div>
+
+            <div class="grid-categorias">
+
+                <div class="categoria">
+                    <div class="imagem-categoria"></div>
+                    <p>Frutas</p>
+                </div>
+
+                <div class="categoria">
+                    <div class="imagem-categoria"></div>
+                    <p>Vegetais</p>
+                </div>
+
+                <div class="categoria">
+                    <div class="imagem-categoria"></div>
+                    <p>Carnes</p>
+                </div>
+
+                <div class="categoria">
+                    <div class="imagem-categoria"></div>
+                    <p>Lanches</p>
+                </div>
+
+                <div class="categoria">
+                    <div class="imagem-categoria"></div>
+                    <p>Congelados</p>
+                </div>
+
+                <div class="categoria">
+                    <div class="imagem-categoria"></div>
+                    <p>Padaria</p>
+                </div>
+
+                <div class="categoria">
+                    <div class="imagem-categoria"></div>
+                    <p>Despensa</p>
+                </div>
+
+                <div class="categoria">
+                    <div class="imagem-categoria"></div>
+                    <p>Bebidas</p>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- MENU INFERIOR -->
+        <nav class="menu-inferior">
+
+            <div class="menu-item ativo">
+                <i class="fa-solid fa-house"></i>
+                <p>Home</p>
+            </div>
+
+            <div class="menu-item">
+                <i class="fa-solid fa-table-cells-large"></i>
+                <p>Categorias</p>
+            </div>
+
+            <div class="menu-item">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <p>Carrinho</p>
+            </div>
+
+            <div class="menu-item">
+                <i class="fa-regular fa-clipboard"></i>
+                <p>Pedidos</p>
+            </div>
+
+            <div class="menu-item">
+                <i class="fa-regular fa-user"></i>
+                <p>Perfil</p>
+            </div>
+
+        </nav>
+
+    </div>
+
+</body>
+</html>

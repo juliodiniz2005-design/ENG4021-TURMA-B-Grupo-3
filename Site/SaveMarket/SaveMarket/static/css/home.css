@@ -1,0 +1,183 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#f5f5f5;
+    display:flex;
+    justify-content:center;
+}
+
+.container{
+    width:100%;
+    max-width:450px;
+    min-height:100vh;
+    background:white;
+    padding:20px;
+    position:relative;
+}
+
+/* TOPO */
+
+.topo{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:20px;
+}
+
+.localizacao{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.icone-local{
+    width:40px;
+    height:40px;
+    background:#ececec;
+    border-radius:12px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.entregar{
+    font-size:12px;
+    color:gray;
+}
+
+.icones-topo{
+    display:flex;
+    gap:20px;
+    font-size:22px;
+}
+
+/* PESQUISA */
+
+.pesquisa{
+    margin-top:30px;
+    background:#e9e9e9;
+    border-radius:30px;
+    padding:14px 20px;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.pesquisa input{
+    border:none;
+    background:none;
+    outline:none;
+    width:100%;
+    font-size:16px;
+}
+
+/* BANNER */
+
+.banner{
+    margin-top:30px;
+    height:180px;
+    background:#dddddd;
+    border-radius:30px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:#555;
+}
+
+/* BOLINHAS */
+
+.bolinhas{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    margin-top:15px;
+}
+
+.bolinhas span{
+    width:10px;
+    height:10px;
+    background:#ccc;
+    border-radius:50%;
+}
+
+.bolinhas .ativa{
+    background:#333;
+}
+
+/* CATEGORIAS */
+
+.categorias{
+    margin-top:30px;
+    padding-bottom:100px;
+}
+
+.titulo-categoria{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.titulo-categoria a{
+    text-decoration:none;
+    color:#444;
+}
+
+.grid-categorias{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px 10px;
+}
+
+.categoria{
+    text-align:center;
+}
+
+.imagem-categoria{
+    width:75px;
+    height:75px;
+    background:#ddd;
+    border-radius:20px;
+    margin:auto;
+    margin-bottom:10px;
+}
+
+/* MENU INFERIOR */
+
+.menu-inferior{
+    position:fixed;
+    bottom:0;
+    width:100%;
+    max-width:450px;
+    background:white;
+    border-top:1px solid #ddd;
+
+    display:flex;
+    justify-content:space-around;
+
+    padding:12px 0;
+}
+
+.menu-item{
+    text-align:center;
+    color:gray;
+    font-size:14px;
+}
+
+.menu-item i{
+    font-size:22px;
+    margin-bottom:5px;
+}
+
+.menu-item.ativo{
+    color:black;
+    font-weight:bold;
+}
