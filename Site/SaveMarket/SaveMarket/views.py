@@ -1,9 +1,11 @@
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from .models import Produto
 
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'home.html', {'produtos': Produto.objects.all()})
 
 @staff_member_required  # só admin acessa
 def admin_usuarios(request):
