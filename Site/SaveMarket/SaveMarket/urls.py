@@ -17,11 +17,9 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
-from . import views
 from django.conf import settings
 from django.conf.urls.static import static
-
-
+from SaveMarket import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -32,4 +30,5 @@ urlpatterns = [
     path('perfil/', views.perfil_view, name='perfil'),
     path('produto/', views.produto_view, name='produto'),
     path('produto/<int:pk>/', views.produto_view, name='produto_detalhe'),
+    path('mercado/<int:pk>/', views.mercado_view, name='mercado'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

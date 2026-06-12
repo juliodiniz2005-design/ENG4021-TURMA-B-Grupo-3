@@ -1,24 +1,21 @@
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
-from SaveMarket.Produtos.models import Produto, MercadoParceiro  
+from SaveMarket.Produtos.models import Produto, MercadoParceiro
+
 
 def home(request):
     produtos = Produto.objects.filter(validade__gte=timezone.now().date())
     mercados = MercadoParceiro.objects.all()
- 
+
     # Busca
     q = request.GET.get('q', '')
     if q:
         produtos = produtos.filter(titulo__icontains=q)
- 
-    # Filtro por categoria
-    categoria = request.GET.get('categoria', '')
-    if categoria:
-        produtos = produtos.filter(mercado__categoria=categoria)
- 
+
     # Ordenação
     sort = request.GET.get('sort', 'validade')
     if sort == 'desconto':
@@ -27,27 +24,31 @@ def home(request):
         produtos = produtos.order_by('preco_desconto')
     else:
         produtos = produtos.order_by('validade')
- 
+
     return render(request, 'home.html', {
         'produtos': produtos,
         'mercados': mercados,
     })
 
-def produto_view(request, pk):                             # ← recebe pk
-    produto = get_object_or_404(Produto, pk=pk)
-    return render(request, 'produto.html', {'produto': produto})
 
-def mercado_view(request, pk):                             # ← nova view
+def produto_view(request, pk=None):
+    if pk:
+        produto = get_object_or_404(Produto, pk=pk)
+        return render(request, 'produto.html', {'produto': produto})
+    return render(request, 'produto.html')
+
+
+def mercado_view(request, pk):
     mercado = get_object_or_404(MercadoParceiro, pk=pk)
     produtos = mercado.produtos.all().order_by('validade')
     return render(request, 'mercado.html', {'mercado': mercado, 'produtos': produtos})
 
-# --- resto do código sem alteração ---
 
 @staff_member_required
 def admin_usuarios(request):
     usuarios = User.objects.all()
     return render(request, 'lista_usuarios.html', {'usuarios': usuarios})
+
 
 def registro_view(request):
     mensagem = ''
@@ -62,6 +63,7 @@ def registro_view(request):
                                      password=senha, first_name=nome)
             return redirect('login')
     return render(request, 'registro.html', {'mensagem': mensagem})
+
 
 def login_view(request):
     mensagem = ''
@@ -80,11 +82,7 @@ def login_view(request):
             mensagem = 'E-mail ou senha incorretos.'
     return render(request, 'login.html', {'mensagem': mensagem})
 
+
+@login_required
 def perfil_view(request):
     return render(request, 'perfil.html')
-
-def perfil_view(request):
-    return render(request, 'perfil.html')
-
-def produto_view(request):
-    return render(request, 'produto.html')
