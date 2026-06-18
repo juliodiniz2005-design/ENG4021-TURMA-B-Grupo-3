@@ -53,7 +53,7 @@ def produto_view(request, pk=None):
 
 def mercado_view(request, pk):
     mercado = get_object_or_404(MercadoParceiro, pk=pk)
-    produtos = mercado.produtos.all().order_by('validade')
+    produtos = mercado.produtos.filter(validade__gte=timezone.now().date()).order_by('validade')
     return render(request, 'mercado.html', {'mercado': mercado, 'produtos': produtos})
 
 
