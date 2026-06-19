@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
+from datetime import timedelta
 from SaveMarket.Produtos.models import Produto, MercadoParceiro, Favorito
 from django.db.models import Q
 from django.contrib.auth import authenticate, login
@@ -27,6 +28,23 @@ def home(request):
     if categoria:
         produtos = produtos.filter(categoria__iexact=categoria)
 
+    # Filtro por faixa de desconto
+    desconto = request.GET.get('desconto', '')
+
+    if desconto:
+        desconto_minimo = float(desconto)
+        produtos = [
+            produto for produto in produtos
+            if produto.percentual_desconto >= desconto_minimo
+        ]
+
+    # Ordenação
+    sort = request.GET.get('sort', 'validade')
+
+    if sort == 'desconto':
+        produtos = sorted(produtos, key=lambda p: p.percentual_desconto, reverse=True)
+    elif sort == 'preco':
+        produtos = sorted(produtos, key=lambda p: p.preco_desconto)
     # TAREFA 1: Ordenação e Menor Preço (Unindo a lógica do grupo com a nossa do HTML)
     ordenar = request.GET.get('ordenar', '') # Nosso botão do HTML
     sort = request.GET.get('sort', 'validade') # Botão original do grupo
@@ -36,10 +54,14 @@ def home(request):
     elif sort == 'desconto':
         produtos = sorted(produtos, key=lambda p: p.percentual_desconto, reverse=True)
     else:
-        produtos = produtos.order_by('validade')
+        produtos = sorted(produtos, key=lambda p: p.validade)
 
     # Enviamos a variável 'ofertas' para manter o nosso HTML funcionando perfeitamente
     return render(request, 'home.html', {
+    'produtos': produtos,
+    'mercados': mercados,
+    'categoria': categoria,
+    'desconto': desconto,
         'ofertas': produtos,
         'mercados': mercados,
         'categoria': categoria,
@@ -96,6 +118,24 @@ def login_view(request):
 def perfil_view(request):
     return render(request, 'perfil.html')
 
+
+@login_required
+def dashboard_mercado(request):
+    produtos = Produto.objects.all().order_by('validade')
+
+    produtos_risco = produtos.filter(
+        validade__lte=timezone.now().date() + timedelta(days=3)
+    )
+
+    total_produtos = produtos.count()
+    total_risco = produtos_risco.count()
+
+    return render(request, 'dashboard_mercado.html', {
+        'produtos': produtos,
+        'produtos_risco': produtos_risco,
+        'total_produtos': total_produtos,
+        'total_risco': total_risco,
+    })
 @login_required
 def alternar_favorito(request, produto_id):
     produto = get_object_or_404(Produto, pk=produto_id)
