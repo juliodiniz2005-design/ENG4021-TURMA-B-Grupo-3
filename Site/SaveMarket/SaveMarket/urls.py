@@ -42,5 +42,6 @@ urlpatterns = [
     path('perfil/enderecos/', views.enderecos_view, name='enderecos'),
     path('perfil/enderecos/remover/<int:pk>/', views.remover_endereco_view, name='remover_endereco'),
     path('logout/', views.logout_view, name='logout'),
+    path('carrinho/sucesso/', views.checkout_sucesso, name='checkout_sucesso'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
   + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
