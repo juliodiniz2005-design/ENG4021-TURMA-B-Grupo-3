@@ -266,6 +266,35 @@ def atualizar_carrinho(request, pk):
     return redirect('carrinho')
 
 @login_required
+def checkout_sucesso(request):
+    carrinho = request.session.get('carrinho', {})
+    
+    if not carrinho:
+        return redirect('home')
+        
+    total_original = 0
+    total_com_desconto = 0
+    produtos_resumo = []
+    
+    for produto_id, quantidade in carrinho.items():
+        produto = get_object_or_404(Produto, pk=produto_id)
+        total_original += produto.preco_original * quantidade
+        total_com_desconto += produto.preco_desconto * quantidade
+        produtos_resumo.append({'produto': produto, 'quantidade': quantidade})
+        
+    economia = total_original - total_com_desconto
+    
+    del request.session['carrinho']
+    request.session.modified = True
+    
+    return render(request, 'sucesso.html', {
+        'produtos': produtos_resumo,
+        'total': total_com_desconto,
+        'economia': economia
+    })
+
+
+@login_required
 def dashboard_mercado(request):
     produtos = Produto.objects.all().order_by('validade')
 
