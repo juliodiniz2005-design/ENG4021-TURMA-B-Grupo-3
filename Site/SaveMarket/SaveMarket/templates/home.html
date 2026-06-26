@@ -39,8 +39,6 @@
 </header>
 
 <main>
-
-    <!-- HERO -->
     <section class="hero">
         <div class="hero-text">
             <span class="hero-tag">Menos desperdício, mais economia</span>
@@ -61,8 +59,6 @@
     </section>
 
     <div class="page-body">
-
-        <!-- CATEGORIAS -->
         <section class="section" id="categorias">
             <div class="section-header">
                 <h2>Comprar por categoria</h2>
@@ -104,7 +100,6 @@
             </div>
         </section>
 
-        <!-- MERCADOS PARCEIROS -->
         {% if mercados %}
         <section class="section">
             <div class="section-header">
@@ -125,6 +120,7 @@
         </section>
         {% endif %}
 
+<<<<<<< HEAD
         <!-- FILTRO POR DESCONTO -->
         <section class="section">
             <div class="section-header">
@@ -139,7 +135,18 @@
             </div>
         </section>
 
+=======
+<<<<<<< HEAD
+=======
+    <div class="filtros-desconto">
+        <a href="?desconto=20" class="btn-nav">20% ou mais</a>
+        <a href="?desconto=30" class="btn-nav">30% ou mais</a>
+        <a href="?desconto=50" class="btn-nav">50% ou mais</a>
+    </div>
+    </section>
+>>>>>>> 8e6081dae2dc158f57076328def75e36481bac51
         <!-- PRODUTOS -->
+>>>>>>> 8843cb6e868a64b6e45860d0a7f83e37e8040562
         <section class="section">
             <div class="section-header">
                 <h2>⏰ Vence em breve</h2>
@@ -149,6 +156,8 @@
                         <option value="validade" {% if request.GET.sort == 'validade' or not request.GET.sort %}selected{% endif %}>Por validade</option>
                         <option value="desconto" {% if request.GET.sort == 'desconto' %}selected{% endif %}>Maior desconto</option>
                         <option value="preco" {% if request.GET.sort == 'preco' %}selected{% endif %}>Menor preço</option>
+                        
+                        <option value="recentes" {% if request.GET.sort == 'recentes' %}selected{% endif %}>Mais recentes</option>
                     </select>
                 </div>
             </div>
@@ -182,6 +191,7 @@
                         <p class="produto-mercado">
                             🏬 {{ produto.mercado.nome }}
                         </p>
+<<<<<<< HEAD
                         <h3 class="produto-titulo">{{ produto.titulo }}</h3>
 
                         {% if produto.dias_para_vencer == 0 %}
@@ -190,6 +200,13 @@
                             </p>
                         {% endif %}
 
+=======
+                        
+                        <a href="{% url 'produto_view' produto.pk %}" style="text-decoration: none; color: inherit;">
+                            <h3 class="produto-titulo" style="cursor: pointer; transition: color 0.2s;">{{ produto.titulo }}</h3>
+                        </a>
+                        
+>>>>>>> 8e6081dae2dc158f57076328def75e36481bac51
                         <div class="produto-precos">
                             <span class="preco-novo">R$ {{ produto.preco_desconto|floatformat:2 }}</span>
                             <span class="preco-antigo">R$ {{ produto.preco_original|floatformat:2 }}</span>
@@ -216,7 +233,6 @@
                 {% endfor %}
             </div>
         </section>
-
     </div>
 </main>
 
@@ -242,6 +258,29 @@
         <p>&copy; 2025 SaveMarket</p>
     </div>
 </footer>
+
+<nav class="menu-inferior">
+    <div class="menu-item ativo">
+        <i class="fa-solid fa-house"></i>
+        <p>Home</p>
+    </div>
+    <div class="menu-item">
+        <i class="fa-solid fa-table-cells-large"></i>
+        <p>Categorias</p>
+    </div>
+    <div class="menu-item">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <p>Carrinho</p>
+    </div>
+    <div class="menu-item">
+        <i class="fa-regular fa-clipboard"></i>
+        <p>Pedidos</p>
+    </div>
+    <div class="menu-item">
+        <i class="fa-regular fa-user"></i>
+        <p>Perfil</p>
+    </div>
+</nav>
 
 <script>
 function applySort(value) {

@@ -8,6 +8,8 @@ from datetime import timedelta
 from SaveMarket.Produtos.models import Produto, MercadoParceiro, Favorito
 from django.db.models import Q
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login
+
 
 def home(request):
     produtos = Produto.objects.filter(validade__gte=timezone.now().date())
@@ -26,6 +28,8 @@ def home(request):
     if categoria:
         produtos = produtos.filter(categoria__iexact=categoria)
 
+    # TAREFA LARANJA: Gerencia os tipos de ordenação selecionados pelo Dropdown
+    sort = request.GET.get('sort', 'validade')
     # Filtro por faixa de desconto
     desconto = request.GET.get('desconto', '')
 
@@ -47,36 +51,48 @@ def home(request):
     ordenar = request.GET.get('ordenar', '') # Nosso botão do HTML
     sort = request.GET.get('sort', 'validade') # Botão original do grupo
 
-    if ordenar == 'menor_preco' or sort == 'preco':
+    if sort == 'preco':
         produtos = produtos.order_by('preco_desconto')
+    elif sort == 'recentes':
+        produtos = produtos.order_by('-data_criacao')
     elif sort == 'desconto':
         produtos = sorted(produtos, key=lambda p: p.percentual_desconto, reverse=True)
     else:
         produtos = sorted(produtos, key=lambda p: p.validade)
 
-    # Enviamos a variável 'ofertas' para manter o nosso HTML funcionando perfeitamente
     return render(request, 'home.html', {
-    'produtos': produtos,
-    'mercados': mercados,
-    'categoria': categoria,
-    'desconto': desconto,
-        'ofertas': produtos,
+        'produtos': produtos,
         'mercados': mercados,
         'categoria': categoria,
+        'desconto': desconto,
+        'ofertas': produtos,
     })
 
+
+# TAREFA VERMELHA: Sistema de recebimento de Avaliações
 def produto_view(request, pk=None):
     if pk:
         produto = get_object_or_404(Produto, pk=pk)
-        return render(request, 'produto.html', {'produto': produto})
-    return render(request, 'produto.html')
+        
+        # Se o usuário enviar uma nota via POST
+        if request.method == 'POST':
+            nota = request.POST.get('nota')
+            comentario = request.POST.get('comentario', '')
+            if nota:
+                from SaveMarket.Produtos.models import Avaliacao
+                Avaliacao.objects.create(produto=produto, nota=int(nota), comentario=comentario)
+                return redirect(request.path)
+
+        return render(request, 'detalhes-produto.html', {'produto': produto})
+    
+    return render(request, 'detalhes-produto.html')
 
 def mercado_view(request, pk):
     mercado = get_object_or_404(MercadoParceiro, pk=pk)
     produtos = mercado.produtos.filter(validade__gte=timezone.now().date()).order_by('validade')
     return render(request, 'mercado.html', {'mercado': mercado, 'produtos': produtos})
 
-@staff_member_required  # só admin acessa
+@staff_member_required
 def admin_usuarios(request):
     usuarios = User.objects.all()
     return render(request, 'lista_usuarios.html', {'usuarios': usuarios})
@@ -90,8 +106,7 @@ def registro_view(request):
         if User.objects.filter(email=email).exists():
             mensagem = 'E-mail já cadastrado.'
         else:
-            User.objects.create_user(username=email, email=email,
-                                     password=senha, first_name=nome)
+            User.objects.create_user(username=email, email=email, password=senha, first_name=nome)
             return redirect('login')
     return render(request, 'registro.html', {'mensagem': mensagem})
 
@@ -107,7 +122,7 @@ def login_view(request):
         usuario = authenticate(request, username=username, password=password)
         if usuario is not None:
             login(request, usuario)
-            return redirect('home') # Ajustado para ir para a Home após o login
+            return redirect('home')
         else:
             mensagem = 'E-mail ou senha incorretos.'
     return render(request, 'login.html', {'mensagem': mensagem})
