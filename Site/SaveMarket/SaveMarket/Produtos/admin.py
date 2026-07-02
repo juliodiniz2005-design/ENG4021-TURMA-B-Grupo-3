@@ -7,7 +7,7 @@ from .models import MercadoParceiro, Produto
 class ProdutoInline(admin.TabularInline):
     model = Produto
     extra = 1
-    fields = ('titulo', 'preco_original', 'preco_desconto', 'validade')
+    fields = ('titulo', 'estoque', 'preco_original', 'preco_desconto', 'validade', 'imagem')
 
 
 @admin.register(MercadoParceiro)
@@ -23,7 +23,7 @@ class MercadoParceiroAdmin(admin.ModelAdmin):
 
 @admin.register(Produto)
 class ProdutoAdmin(admin.ModelAdmin):
-    list_display = ('titulo', 'mercado', 'preco_original', 'preco_desconto', 'validade', 'status_validade')
+    list_display = ('titulo', 'mercado', 'estoque', 'preco_original', 'preco_desconto', 'validade', 'status_validade')
     list_filter = ('mercado', 'validade')
     search_fields = ('titulo',)
     ordering = ('validade',)
@@ -34,9 +34,9 @@ class ProdutoAdmin(admin.ModelAdmin):
         hoje = timezone.now().date()
         dias = (obj.validade - hoje).days
         if dias < 0:
-            return format_html('<span style="color:red">Vencido</span>')
+            return format_html('<span style="color:red">{}</span>', 'Vencido')
         elif dias == 0:
-            return format_html('<span style="color:orange">Vence hoje</span>')
+            return format_html('<span style="color:orange">{}</span>', 'Vence hoje')
         elif dias <= 3:
             return format_html('<span style="color:#cc8800">⚠ {} dias</span>', dias)
         return format_html('<span style="color:green">{} dias</span>', dias)

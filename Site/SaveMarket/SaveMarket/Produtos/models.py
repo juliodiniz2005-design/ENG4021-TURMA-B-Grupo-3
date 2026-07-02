@@ -1,24 +1,22 @@
 from django.db import models
 from django.utils import timezone
-<<<<<<< HEAD
-from django.core.validators import MinValueValidator, MaxValueValidator
-
-=======
 from django.contrib.auth.models import User
+from django.core.validators import FileExtensionValidator
+from django.db.models.signals import post_save
+from django.dispatch import receiver
  
- 
->>>>>>> 8843cb6e868a64b6e45860d0a7f83e37e8040562
 class MercadoParceiro(models.Model):
     nome = models.CharField(max_length=255, verbose_name="Nome")
     endereco = models.CharField(max_length=500, verbose_name="Endereço")
-
+ 
     class Meta:
         verbose_name = "Mercado Parceiro"
         verbose_name_plural = "Mercados Parceiros"
-
+ 
     def __str__(self):
         return self.nome
-
+ 
+ 
 class Produto(models.Model):
     mercado = models.ForeignKey(
         MercadoParceiro,
@@ -27,10 +25,11 @@ class Produto(models.Model):
         verbose_name="Mercado Parceiro",
     )
     titulo = models.CharField(max_length=255, verbose_name="Título")
+
     categoria = models.CharField(
-        max_length=100,
-        verbose_name="Categoria",
-        default="Outros"
+    max_length=100,
+    verbose_name="Categoria",
+    default="Outros"
     )
     preco_original = models.DecimalField(
         max_digits=10, decimal_places=2, verbose_name="Preço Original"
@@ -39,22 +38,19 @@ class Produto(models.Model):
         max_digits=10, decimal_places=2, verbose_name="Preço com Desconto"
     )
     validade = models.DateField(verbose_name="Validade")
-<<<<<<< HEAD
-    
-    
-    data_criacao = models.DateTimeField(auto_now_add=True, verbose_name="Adicionado em")
-=======
-    imagem = models.URLField(max_length=500, blank=True, null=True, verbose_name="URL da Imagem")
->>>>>>> 8843cb6e868a64b6e45860d0a7f83e37e8040562
-
+    imagem = models.ImageField(upload_to="produtos/", validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png'])], default = None, blank=True, null=True,verbose_name="Imagem")
+    estoque = models.PositiveIntegerField(
+    default=0,
+    verbose_name="Quantidade em Estoque"
+    )
     class Meta:
         verbose_name = "Produto"
         verbose_name_plural = "Produtos"
         ordering = ["validade"]
-
+ 
     def __str__(self):
         return f"{self.titulo} — {self.mercado.nome}"
-
+ 
     @property
     def percentual_desconto(self):
         if self.preco_original > 0:
@@ -64,25 +60,6 @@ class Produto(models.Model):
 
     @property
     def dias_para_vencer(self):
-<<<<<<< HEAD
-        delta = self.validade - timezone.now().date()
-        return max(delta.days, 0)
-
-
-class Avaliacao(models.Model):
-    produto = models.ForeignKey(Produto, on_delete=models.CASCADE, related_name='avaliacoes')
-    nota = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], verbose_name="Nota (1 a 5)")
-    comentario = models.TextField(blank=True, null=True, verbose_name="Comentário")
-    data_avaliacao = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        verbose_name = "Avaliação"
-        verbose_name_plural = "Avaliações"
-        ordering = ['-data_avaliacao']
-
-    def __str__(self):
-        return f"{self.nota} estrelas - {self.produto.titulo}"
-=======
       delta = self.validade - timezone.now().date()
       return max(delta.days, 0)
 
@@ -98,4 +75,34 @@ class Favorito(models.Model):
 
     def __str__(self):
         return f"{self.usuario.username} - {self.produto.titulo}"
->>>>>>> 8843cb6e868a64b6e45860d0a7f83e37e8040562
+
+class Perfil(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='perfil')
+    telefone = models.CharField(max_length=20, blank=True)
+    foto = models.ImageField(upload_to='perfis/', blank=True, null=True)
+
+    def __str__(self):
+        return f"Perfil de {self.user.username}"
+
+
+class Endereco(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='enderecos')
+    rua = models.CharField(max_length=255)
+    numero = models.CharField(max_length=20)
+    bairro = models.CharField(max_length=100)
+    cidade = models.CharField(max_length=100)
+    estado = models.CharField(max_length=2)
+    cep = models.CharField(max_length=10)
+
+    class Meta:
+        verbose_name = "Endereço"
+        verbose_name_plural = "Endereços"
+
+    def __str__(self):
+        return f"{self.rua}, {self.numero} — {self.cidade}/{self.estado}"
+
+
+@receiver(post_save, sender=User)
+def criar_perfil(sender, instance, created, **kwargs):
+    if created:
+        Perfil.objects.create(user=instance)

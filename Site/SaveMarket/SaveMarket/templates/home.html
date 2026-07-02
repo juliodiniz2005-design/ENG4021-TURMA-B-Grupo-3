@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SaveMarket</title>
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="stylesheet" href="{% static 'css/toast.css' %}">
 </head>
 <body>
 
 <header class="navbar">
     <div class="navbar-inner">
-        <div class="brand">
+        <a href="{% url 'home' %}" class="brand">
             <span class="brand-icon">🏷️</span>
             <span class="brand-name">Save<strong>Market</strong></span>
-        </div>
+        </a>
 
         <form class="search-bar" method="get" action="{% url 'home' %}">
             <span class="icon-emoji">🔍</span>
@@ -39,6 +39,8 @@
 </header>
 
 <main>
+
+    <!-- HERO -->
     <section class="hero">
         <div class="hero-text">
             <span class="hero-tag">Menos desperdício, mais economia</span>
@@ -59,6 +61,8 @@
     </section>
 
     <div class="page-body">
+
+        <!-- CATEGORIAS -->
         <section class="section" id="categorias">
             <div class="section-header">
                 <h2>Comprar por categoria</h2>
@@ -100,6 +104,7 @@
             </div>
         </section>
 
+        <!-- MERCADOS PARCEIROS -->
         {% if mercados %}
         <section class="section">
             <div class="section-header">
@@ -119,22 +124,21 @@
             </div>
         </section>
         {% endif %}
-        <section class="section">
-    <div class="section-header">
-        <h2>Filtrar por desconto</h2>
-        <a href="{% url 'home' %}" class="ver-tudo">Limpar filtro</a>
-    </div>
 
-<<<<<<< HEAD
-=======
-    <div class="filtros-desconto">
-        <a href="?desconto=20" class="btn-nav">20% ou mais</a>
-        <a href="?desconto=30" class="btn-nav">30% ou mais</a>
-        <a href="?desconto=50" class="btn-nav">50% ou mais</a>
-    </div>
-    </section>
+        <!-- FILTRO POR DESCONTO -->
+        <section class="section">
+            <div class="section-header">
+                <h2>Filtrar por desconto</h2>
+                <a href="{% url 'home' %}" class="ver-tudo">Limpar filtro</a>
+            </div>
+            <div class="filtros-desconto">
+                <a href="?desconto=20" class="btn-nav">20% ou mais</a>
+                <a href="?desconto=30" class="btn-nav">30% ou mais</a>
+                <a href="?desconto=50" class="btn-nav">50% ou mais</a>
+            </div>
+        </section>
+
         <!-- PRODUTOS -->
->>>>>>> 8843cb6e868a64b6e45860d0a7f83e37e8040562
         <section class="section">
             <div class="section-header">
                 <h2>⏰ Vence em breve</h2>
@@ -144,7 +148,6 @@
                         <option value="validade" {% if request.GET.sort == 'validade' or not request.GET.sort %}selected{% endif %}>Por validade</option>
                         <option value="desconto" {% if request.GET.sort == 'desconto' %}selected{% endif %}>Maior desconto</option>
                         <option value="preco" {% if request.GET.sort == 'preco' %}selected{% endif %}>Menor preço</option>
-                        
                         <option value="recentes" {% if request.GET.sort == 'recentes' %}selected{% endif %}>Mais recentes</option>
                     </select>
                 </div>
@@ -179,35 +182,45 @@
                         <p class="produto-mercado">
                             🏬 {{ produto.mercado.nome }}
                         </p>
-                        
-                        <a href="{% url 'produto_view' produto.pk %}" style="text-decoration: none; color: inherit;">
-                            <h3 class="produto-titulo" style="cursor: pointer; transition: color 0.2s;">{{ produto.titulo }}</h3>
+
+                        <a href="{% url 'produto_detalhe' produto.pk %}" class="produto-titulo-link">
+                            <h3 class="produto-titulo">{{ produto.titulo }}</h3>
                         </a>
-                        
+
+                        {% if produto.dias_para_vencer == 0 %}
+                            <p class="aviso-consumo">
+                                ⚠️ Próprio para consumo, próximo ao vencimento.
+                            </p>
+                        {% endif %}
+
                         <div class="produto-precos">
                             <span class="preco-novo">R$ {{ produto.preco_desconto|floatformat:2 }}</span>
                             <span class="preco-antigo">R$ {{ produto.preco_original|floatformat:2 }}</span>
                             <span class="desconto-pill">-{{ produto.percentual_desconto }}%</span>
                         </div>
+                        <p class="produto-estoque">
+                            Estoque: {{ produto.estoque }} unidades
+                        </p>
                     </div>
 
                     <div class="produto-footer">
-                        <form method="post" action="{% url 'adicionar_carrinho' produto.pk %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn-adicionar">
-                                🛒 Adicionar
-                            </button>
-                        </form>
+                        <button type="button" class="btn-adicionar"
+                                onclick="adicionarCarrinho({{ produto.pk }}, this)">
+                            🛒 Adicionar
+                        </button>
                     </div>
                 </div>
                 {% empty %}
                 <div class="empty-state">
-                    📦
-                    <p>Nenhum produto disponível no momento.</p>
+                    <span style="font-size: 40px; display: block; margin-bottom: 10px;">😕</span>
+                    <h3>Nenhum produto encontrado</h3>
+                    <p>Tente pesquisar com outras palavras ou remova os filtros de busca.</p>
+                    <a href="{% url 'home' %}" class="ver-tudo">Limpar buscas</a>
                 </div>
                 {% endfor %}
             </div>
         </section>
+
     </div>
 </main>
 
@@ -234,34 +247,88 @@
     </div>
 </footer>
 
-<nav class="menu-inferior">
-    <div class="menu-item ativo">
-        <i class="fa-solid fa-house"></i>
-        <p>Home</p>
-    </div>
-    <div class="menu-item">
-        <i class="fa-solid fa-table-cells-large"></i>
-        <p>Categorias</p>
-    </div>
-    <div class="menu-item">
-        <i class="fa-solid fa-cart-shopping"></i>
-        <p>Carrinho</p>
-    </div>
-    <div class="menu-item">
-        <i class="fa-regular fa-clipboard"></i>
-        <p>Pedidos</p>
-    </div>
-    <div class="menu-item">
-        <i class="fa-regular fa-user"></i>
-        <p>Perfil</p>
-    </div>
-</nav>
+<!-- CONTAINER DE NOTIFICAÇÕES (TOAST) -->
+<div id="toast-container"></div>
 
 <script>
 function applySort(value) {
     const url = new URL(window.location.href);
     url.searchParams.set('sort', value);
     window.location.href = url.toString();
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function mostrarToast(mensagem, tipo) {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = 'toast toast-' + tipo;
+    const icone = tipo === 'sucesso' ? '✓' : '⚠️';
+    toast.innerHTML = '<span class="toast-icone">' + icone + '</span>' + mensagem;
+    container.appendChild(toast);
+
+    // anima entrada
+    requestAnimationFrame(() => toast.classList.add('toast-show'));
+
+    // remove depois de 3s
+    setTimeout(() => {
+        toast.classList.remove('toast-show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+function adicionarCarrinho(produtoId, botao) {
+    fetch(`/carrinho/adicionar/${produtoId}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => {
+        if (response.redirected) {
+            // não logado -> manda pro login
+            window.location.href = response.url;
+            return null;
+        }
+        return response.json().catch(() => null);
+    })
+    .then(data => {
+        if (data && data.sucesso) {
+            mostrarToast(data.mensagem || 'Produto adicionado ao carrinho!', 'sucesso');
+            const textoOriginal = botao.innerHTML;
+            botao.innerHTML = '✓ Adicionado';
+            botao.style.background = '#0F6E56';
+            botao.disabled = true;
+            setTimeout(() => {
+                botao.innerHTML = textoOriginal;
+                botao.style.background = '';
+                botao.disabled = false;
+            }, 1500);
+        } else if (data && !data.sucesso) {
+            mostrarToast(data.mensagem || 'Produto fora de estoque.', 'erro');
+        } else if (data === null) {
+            // resposta não-JSON inesperada, mas sem redirect
+            return;
+        }
+    })
+    .catch(err => {
+        console.error('Erro:', err);
+        mostrarToast('Erro ao adicionar ao carrinho. Tente novamente.', 'erro');
+    });
 }
 </script>
 

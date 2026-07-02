@@ -6,7 +6,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from datetime import timedelta
 from django.db.models import Q, F, ExpressionWrapper, FloatField
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
+from django.http import JsonResponse
 
 # Importação unificada das Models da equipe
 from SaveMarket.Produtos.models import Produto, MercadoParceiro, Favorito
@@ -28,6 +29,11 @@ def home(request):
     if categoria:
         produtos = produtos.filter(categoria__iexact=categoria)
 
+<<<<<<< HEAD
+=======
+    # TAREFA LARANJA: Gerencia os tipos de ordenação selecionados pelo Dropdown
+    sort = request.GET.get('sort', 'validade')
+>>>>>>> 6f2546b81d331270976c065ab00465fa5ec57cf3
     # Filtro por faixa de desconto
     desconto = request.GET.get('desconto', '')
     if desconto:
@@ -40,6 +46,17 @@ def home(request):
     # Ordenação (Resolvido o bug da lista usando annotate)
     sort = request.GET.get('sort', 'validade')
 
+<<<<<<< HEAD
+=======
+    if sort == 'desconto':
+        produtos = sorted(produtos, key=lambda p: p.percentual_desconto, reverse=True)
+    elif sort == 'preco':
+        produtos = sorted(produtos, key=lambda p: p.preco_desconto)
+    # TAREFA 1: Ordenação e Menor Preço (Unindo a lógica do grupo com a nossa do HTML)
+    ordenar = request.GET.get('ordenar', '') # Nosso botão do HTML
+    sort = request.GET.get('sort', 'validade') # Botão original do grupo
+
+>>>>>>> 6f2546b81d331270976c065ab00465fa5ec57cf3
     if sort == 'preco':
         produtos = produtos.order_by('preco_desconto')
     elif sort == 'recentes':
@@ -56,11 +73,19 @@ def home(request):
 
     return render(request, 'home.html', {
         'produtos': produtos,
+<<<<<<< HEAD
         'ofertas': produtos, # Mantendo para o HTML antigo não quebrar
         'mercados': mercados,
         'categoria': categoria,
         'desconto': desconto,
+=======
+        'mercados': mercados,
+        'categoria': categoria,
+        'desconto': desconto,
+        'ofertas': produtos,
+>>>>>>> 6f2546b81d331270976c065ab00465fa5ec57cf3
     })
+
 
 # TAREFA VERMELHA: Sistema de recebimento de Avaliações
 def produto_view(request, pk=None):
@@ -120,9 +145,69 @@ def login_view(request):
             mensagem = 'E-mail ou senha incorretos.'
     return render(request, 'login.html', {'mensagem': mensagem})
 
+#####INICIO PERFIL#####
 @login_required
 def perfil_view(request):
     return render(request, 'perfil.html')
+
+@login_required
+def meus_dados_view(request):
+    if request.method == 'POST':
+        user = request.user
+        user.first_name = request.POST.get('first_name', '')
+        user.last_name = request.POST.get('last_name', '')
+        user.email = request.POST.get('email', '')
+        user.save()
+ 
+        perfil = user.perfil
+        perfil.telefone = request.POST.get('telefone', '')
+ 
+        # Processa upload da foto (se enviada)
+        if request.FILES.get('foto'):
+            perfil.foto = request.FILES['foto']
+ 
+        perfil.save()
+ 
+        messages.success(request, 'Dados atualizados com sucesso!')
+        return redirect('meus_dados')
+ 
+    return render(request, 'meus_dados.html')
+ 
+ 
+@login_required
+def enderecos_view(request):
+    if request.method == 'POST':
+        Endereco.objects.create(
+            user=request.user,
+            rua=request.POST.get('rua'),
+            numero=request.POST.get('numero'),
+            bairro=request.POST.get('bairro'),
+            cidade=request.POST.get('cidade'),
+            estado=request.POST.get('estado').upper(),
+            cep=request.POST.get('cep'),
+        )
+        messages.success(request, 'Endereço adicionado com sucesso!')
+        return redirect('enderecos')
+ 
+    enderecos = request.user.enderecos.all()
+    return render(request, 'enderecos.html', {'enderecos': enderecos})
+ 
+ 
+@login_required
+def remover_endereco_view(request, pk):
+    endereco = get_object_or_404(Endereco, pk=pk, user=request.user)
+    endereco.delete()
+    messages.success(request, 'Endereço removido.')
+    return redirect('enderecos')
+ 
+ 
+def logout_view(request):
+    logout(request)
+    return redirect('home')
+
+#####FINAL PERFIL#####
+
+
 
 @login_required
 def carrinho_view(request):
@@ -160,11 +245,46 @@ def carrinho_view(request):
 def adicionar_carrinho(request, pk):
     produto = get_object_or_404(Produto, pk=pk)
     carrinho = request.session.get('carrinho', {})
+    pk_str = str(pk)
+    eh_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
  
+    # Verifica estoque (ajuste 'quantidade' para o nome do campo no seu model)
+    estoque = getattr(produto, 'quantidade', None)
+    quantidade_atual = carrinho.get(pk_str, 0)
+ 
+    if estoque is not None and quantidade_atual + 1 > estoque:
+        if eh_ajax:
+            return JsonResponse({
+                'sucesso': False,
+                'mensagem': f'"{produto.titulo}" está sem estoque suficiente.'
+            })
+        messages.error(request, f'"{produto.titulo}" está sem estoque suficiente.')
+        return redirect('home')
+ 
+    # Adiciona ao carrinho
+    carrinho[pk_str] = quantidade_atual + 1
+    request.session['carrinho'] = carrinho
+ 
+    if eh_ajax:
+        return JsonResponse({
+            'sucesso': True,
+            'mensagem': f'"{produto.titulo}" adicionado ao carrinho!',
+            'total_itens': sum(carrinho.values())
+        })
+ 
+    messages.success(request, f'"{produto.titulo}" adicionado ao carrinho.')
+    return redirect('home')
+    produto = get_object_or_404(Produto, pk=pk)
+    carrinho = request.session.get('carrinho', {})
+
     pk_str = str(pk)
     carrinho[pk_str] = carrinho.get(pk_str, 0) + 1
- 
     request.session['carrinho'] = carrinho
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        total_itens = sum(carrinho.values())
+        return JsonResponse({'sucesso': True, 'total_itens': total_itens})
+
     messages.success(request, f'"{produto.titulo}" adicionado ao carrinho.')
     return redirect('home')
  

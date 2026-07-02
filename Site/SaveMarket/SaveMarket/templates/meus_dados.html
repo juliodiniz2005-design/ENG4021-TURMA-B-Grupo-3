@@ -1,0 +1,95 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Meus Dados</title>
+
+    <link rel="stylesheet" href="{% static 'css/perfil.css' %}">
+</head>
+<body>
+
+    <div class="perfil-container">
+        <a href="{% url 'perfil' %}" style="display: flex; align-items: center; text-decoration: none; color: #333; margin-bottom: 20px; font-weight: bold;">
+            ← Voltar para Perfil
+        </a>
+
+        <div class="perfil-topo">
+            <h1>Meus Dados</h1>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert-msg">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" class="form-dados" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- FOTO DE PERFIL -->
+            <div class="foto-upload">
+                {% if request.user.perfil.foto %}
+                    <img src="{{ request.user.perfil.foto.url }}" class="foto-preview" id="fotoPreview" alt="Foto de perfil">
+                {% else %}
+                    <div class="foto-preview-vazia" id="fotoPreview">👤</div>
+                {% endif %}
+
+                <label for="foto" class="btn-foto">
+                    📷 Alterar foto
+                </label>
+                <input type="file" id="foto" name="foto" accept="image/*" style="display: none;" onchange="previewFoto(event)">
+            </div>
+
+            <div class="campo">
+                <label for="first_name">Nome</label>
+                <input type="text" id="first_name" name="first_name" value="{{ request.user.first_name }}">
+            </div>
+
+            <div class="campo">
+                <label for="last_name">Sobrenome</label>
+                <input type="text" id="last_name" name="last_name" value="{{ request.user.last_name }}">
+            </div>
+
+            <div class="campo">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" value="{{ request.user.email }}">
+            </div>
+
+            <div class="campo">
+                <label for="telefone">Telefone</label>
+                <input type="text" id="telefone" name="telefone" value="{{ request.user.perfil.telefone|default:'' }}" placeholder="(21) 99999-9999">
+            </div>
+
+            <button type="submit" class="btn-salvar">Salvar alterações</button>
+        </form>
+
+    </div>
+
+    <script>
+    function previewFoto(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('fotoPreview');
+                if (preview.tagName === 'IMG') {
+                    preview.src = e.target.result;
+                } else {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'foto-preview';
+                    img.id = 'fotoPreview';
+                    preview.replaceWith(img);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+    </script>
+
+</body>
+</html>
