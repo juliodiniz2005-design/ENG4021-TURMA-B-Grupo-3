@@ -5,11 +5,12 @@ from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from datetime import timedelta
-from SaveMarket.Produtos.models import Produto, MercadoParceiro, Favorito
-from django.db.models import Q
+from django.db.models import Q, F, ExpressionWrapper, FloatField
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 
+# Importação unificada das Models da equipe
+from SaveMarket.Produtos.models import Produto, MercadoParceiro, Favorito
 
 def home(request):
     produtos = Produto.objects.filter(validade__gte=timezone.now().date())
@@ -28,11 +29,13 @@ def home(request):
     if categoria:
         produtos = produtos.filter(categoria__iexact=categoria)
 
+<<<<<<< HEAD
+=======
     # TAREFA LARANJA: Gerencia os tipos de ordenação selecionados pelo Dropdown
     sort = request.GET.get('sort', 'validade')
+>>>>>>> 6f2546b81d331270976c065ab00465fa5ec57cf3
     # Filtro por faixa de desconto
     desconto = request.GET.get('desconto', '')
-
     if desconto:
         desconto_minimo = float(desconto)
         produtos = [
@@ -40,9 +43,11 @@ def home(request):
             if produto.percentual_desconto >= desconto_minimo
         ]
 
-    # Ordenação
+    # Ordenação (Resolvido o bug da lista usando annotate)
     sort = request.GET.get('sort', 'validade')
 
+<<<<<<< HEAD
+=======
     if sort == 'desconto':
         produtos = sorted(produtos, key=lambda p: p.percentual_desconto, reverse=True)
     elif sort == 'preco':
@@ -51,21 +56,34 @@ def home(request):
     ordenar = request.GET.get('ordenar', '') # Nosso botão do HTML
     sort = request.GET.get('sort', 'validade') # Botão original do grupo
 
+>>>>>>> 6f2546b81d331270976c065ab00465fa5ec57cf3
     if sort == 'preco':
         produtos = produtos.order_by('preco_desconto')
     elif sort == 'recentes':
         produtos = produtos.order_by('-data_criacao')
     elif sort == 'desconto':
-        produtos = sorted(produtos, key=lambda p: p.percentual_desconto, reverse=True)
+        produtos = produtos.annotate(
+            calculo_desc=ExpressionWrapper(
+                (1.0 - (F('preco_desconto') / F('preco_original'))) * 100.0,
+                output_field=FloatField()
+            )
+        ).order_by('-calculo_desc')
     else:
-        produtos = sorted(produtos, key=lambda p: p.validade)
+        produtos = produtos.order_by('validade')
 
     return render(request, 'home.html', {
         'produtos': produtos,
+<<<<<<< HEAD
+        'ofertas': produtos, # Mantendo para o HTML antigo não quebrar
+        'mercados': mercados,
+        'categoria': categoria,
+        'desconto': desconto,
+=======
         'mercados': mercados,
         'categoria': categoria,
         'desconto': desconto,
         'ofertas': produtos,
+>>>>>>> 6f2546b81d331270976c065ab00465fa5ec57cf3
     })
 
 
@@ -223,7 +241,6 @@ def carrinho_view(request):
         'economia': economia,
     })
  
- 
 @login_required
 def adicionar_carrinho(request, pk):
     produto = get_object_or_404(Produto, pk=pk)
@@ -282,7 +299,6 @@ def remover_carrinho(request, pk):
  
     return redirect('carrinho')
  
- 
 @login_required
 def atualizar_carrinho(request, pk):
     if request.method == 'POST':
@@ -316,6 +332,7 @@ def dashboard_mercado(request):
         'total_produtos': total_produtos,
         'total_risco': total_risco,
     })
+
 @login_required
 def alternar_favorito(request, produto_id):
     produto = get_object_or_404(Produto, pk=produto_id)
