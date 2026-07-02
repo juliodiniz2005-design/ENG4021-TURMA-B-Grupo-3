@@ -106,9 +106,9 @@
                         🐷 Você está economizando <strong>&nbsp;R$ {{ economia|floatformat:2 }}</strong>!
                     </div>
 
-                    <button class="btn-adicionar btn-full" disabled>
-                        Finalizar pedido (em breve)
-                    </button>
+                    <a href="{% url 'checkout_sucesso' %}" class="btn-adicionar btn-full" style="text-decoration: none; display: block; text-align: center; background-color: #00B86B;">
+                        Finalizar Pedido
+                    </a>
                 </div>
 
             </div>
